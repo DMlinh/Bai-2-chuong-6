@@ -1,0 +1,45 @@
+package com.example.bai2;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        List<Khoahoc> listData = getListData();
+        ListView listView = findViewById(R.id.listview);
+
+        // ⚙️ Gắn adapter cho ListView
+        CustomListAdapter adapter = new CustomListAdapter(this, listData);
+        listView.setAdapter(adapter);
+
+        // 📱 Bắt sự kiện click item
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            Khoahoc khoahoc = (Khoahoc) parent.getItemAtPosition(position);
+            Toast.makeText(MainActivity.this,
+                    "Selected: " + khoahoc.toString(),
+                    Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private List<Khoahoc> getListData() {
+        List<Khoahoc> list = new ArrayList<>();
+        list.add(new Khoahoc("android", "Lập trình Android", 600000));
+        list.add(new Khoahoc("windowphone", "Lập trình Window Phone", 800000));
+        list.add(new Khoahoc("ios", "Lập trình iOS", 900000));
+        list.add(new Khoahoc("facebook", "Quảng cáo Facebook", 1200000));
+        list.add(new Khoahoc("adwords", "Quảng cáo Google Adwords", 300000));
+        return list;
+    }
+}
