@@ -1,0 +1,77 @@
+package com.example.bai2;
+
+import android.content.Context;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.util.List;
+
+public class CustomListAdapter extends BaseAdapter {
+
+    private final List<Khoahoc> listData;
+    private final LayoutInflater layoutInflater;
+    private final Context context;
+
+    public CustomListAdapter(Context context, List<Khoahoc> listData) {
+        this.context = context;
+        this.listData = listData;
+        this.layoutInflater = LayoutInflater.from(context);
+    }
+
+    @Override
+    public int getCount() {
+        return listData.size();
+    }
+
+    @Override
+    public Object getItem(int position) {   // ⚠️ Sửa kiểu trả về từ Objects → Object
+        return listData.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {   // ⚠️ Đổi tên đúng chuẩn
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
+        if (convertView == null) {
+            convertView = layoutInflater.inflate(R.layout.list_item_layout, null);
+            holder = new ViewHolder();
+            holder.imagekhoahoc = convertView.findViewById(R.id.imageViewCourse);
+            holder.tenkhoahoc = convertView.findViewById(R.id.name);
+            holder.hocphi = convertView.findViewById(R.id.Fee);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+
+        Khoahoc khoahoc = listData.get(position);
+        holder.tenkhoahoc.setText(khoahoc.getTenkhoahoc());
+        holder.hocphi.setText("Học phí: " + khoahoc.getHocphi());
+
+        int imageID = getMipmapResIdByName(khoahoc.getImagekhoahoc());
+        holder.imagekhoahoc.setImageResource(imageID);
+
+        return convertView;
+    }
+
+    public int getMipmapResIdByName(String resName) {
+        String pkgName = context.getPackageName();
+        int resID = context.getResources().getIdentifier(resName, "mipmap", pkgName);
+        Log.i("CustomListView", "Res Name: " + resName + " ==> Res ID: " + resID);
+        return resID;
+    }
+
+    static class ViewHolder {
+        ImageView imagekhoahoc;
+        TextView tenkhoahoc;
+        TextView hocphi;
+    }
+}
